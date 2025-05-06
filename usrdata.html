@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <script>
+    document.write("Your review was:")
+    const urlParams = new URLSearchParams(window.location.search);
+
+// Access specific parameters
+const param1 = urlParams.get('message');
+
+// Now you can use these variables (param1 and param2) in your code
+document.write(param1)
+// Create a Blob with your data
+var data = new Blob([param1], { type: 'text/plain' });
+
+// Create an anchor element to trigger the download
+var anchor = document.createElement('a');
+anchor.href = URL.createObjectURL(data);
+anchor.download = 'usrdata.txt';
+anchor.textContent = 'Download Text File';
+
+// Append the anchor to the DOM (e.g., into the body)
+document.body.appendChild(anchor);
+
+// Trigger a programmatic click on the anchor
+anchor.click();
+
+// Clean up by removing the anchor
+anchor.remove();
+</script>
+<meta http-equiv="refresh" content="0; URL=index.html?reviewed=yes" />
+
+
+<br >
+<php>
+<?php echo $_GET["message"]; ?><br>
+</php>
+
+
+</html>
