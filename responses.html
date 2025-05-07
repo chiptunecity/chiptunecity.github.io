@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Message Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    .form-group { margin-bottom: 1em; }
+    .message-box { margin-bottom: 0.5em; }
+    #messages-container textarea { width: 100%; }
+    #output { margin-top: 2em; border-top: 1px solid #ccc; padding-top: 1em; }
+  </style>
+</head>
+<body>
+
+<h2>Submit Your Message</h2>
+
+<form id="messageForm">
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+  </div>
+
+  <div class="form-group">
+    <label>Messages:</label>
+    <div id="messages-container">
+      <div class="message-box">
+        <textarea name="message[]" rows="4" placeholder="Write your post"></textarea>
+      </div>
+    </div>
+    <button type="button" onclick="addMessageBox()">+ Add another message</button>
+  </div>
+
+  <div class="form-group">
+    <input type="submit" value="Send Message">
+  </div>
+</form>
+
+<div id="output"></div>
+
+<script>
+  function addMessageBox() {
+    const container = document.getElementById('messages-container');
+    const box = document.createElement('div');
+    box.className = 'message-box';
+    box.innerHTML = '<textarea name="message[]" rows="4" placeholder="Write your post"></textarea>';
+    container.appendChild(box);
+  }
+
+  document.getElementById('messageForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const username = document.getElementById('username').value.trim();
+    const textareas = document.querySelectorAll('#messages-container textarea');
+
+    const messages = Array.from(textareas)
+      .map((ta, i) => `Message ${i + 1}: ${ta.value.trim()}`)
+      .filter(msg => msg.length > 12); // crude empty-check
+
+    let outputHtml = `
+      <h3>Received Post</h3>
+      <p><strong>Username:</strong> ${username || 'N/A'}</p>
+      <h4>Messages:</h4>
+      <ul>${messages.map(msg => `<li>${msg}</li>`).join('')}</ul>
+    `;
+
+    document.getElementById('output').innerHTML = outputHtml;
+  });
+</script>
+
+</body>
+</html>
