@@ -53,7 +53,7 @@
       resultContainer.innerHTML = 'Loading...';
 
       try {
-        const response = await fetch(`/data/${code}.xml`);
+        const response = await fetch(`data/${code}.xml`);
         if (!response.ok) {
           throw new Error('Error file not found.');
         }
