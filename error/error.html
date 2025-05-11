@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error Lookup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
+    }
+    .error-name {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .description, .fix {
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Error Code Search</h1>
+  <p>Enter an error code to look up detailed information.</p>
+  <input type="text" id="searchInput" placeholder="e.g., 0x0A" />
+  <button onclick="searchError()">Search</button>
+
+  <div class="result" id="resultContainer"></div>
+
+  <script>
+    async function searchError() {
+      const code = document.getElementById('searchInput').value.trim();
+      const resultContainer = document.getElementById('resultContainer');
+      resultContainer.innerHTML = 'Loading...';
+
+      try {
+        const response = await fetch(`/data/${code}.xml`);
+        if (!response.ok) {
+          throw new Error('Error file not found.');
+        }
+
+        const xmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+        const errorNode = xmlDoc.querySelector('error');
+
+        if (!errorNode) {
+          resultContainer.innerHTML = 'Invalid XML format.';
+          return;
+        }
+
+        const name = errorNode.getAttribute('name');
+        const description = errorNode.getAttribute('description');
+        const fix = errorNode.getAttribute('fix');
+
+        resultContainer.innerHTML = `
+          <div class="error-name">Error: ${name}</div>
+          <div class="description"><strong>Description:</strong><br>${description.replace(/\n/g, '<br>')}</div>
+          <div class="fix"><strong>Fix:</strong><br>${fix.replace(/\n/g, '<br>')}</div>
+        `;
+      } catch (err) {
+        resultContainer.innerHTML = `Error: ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>

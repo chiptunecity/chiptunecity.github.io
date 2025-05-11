@@ -1,0 +1,13 @@
+<error name="0x0A"
+ description="0x0A is thrown if either:
+ The required Python modules are not present
+ or
+ Python is not installed.
+ Required Python modules:
+ Pygame
+ PgZero"
+ fix="Install the python modules listed above using the command 'pip install pygame, pgzero'.
+  or
+  Install Python from the Microsoft Store at the following URL:
+  https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe">
+  </error>
