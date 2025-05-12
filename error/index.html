@@ -55,7 +55,7 @@
       try {
         const response = await fetch(`data/${code}.xml`);
         if (!response.ok) {
-          throw new Error('Error file not found.');
+          throw new Error('Not Found.');
         }
 
         const xmlText = await response.text();
